@@ -3,9 +3,12 @@ package in.johnrafaellim.expensetrackerapi.service;
 import java.util.List;
 import java.util.Optional;
 
+import in.johnrafaellim.expensetrackerapi.exception.ExpenseNotFoundException;
 import in.johnrafaellim.expensetrackerapi.exception.ResourceNotFoundException;
 import in.johnrafaellim.expensetrackerapi.repository.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import in.johnrafaellim.expensetrackerapi.entity.Expense;
@@ -17,8 +20,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     private ExpenseRepository expenseRepo;
 
     @Override
-    public List<Expense> getAllExpenses() {
-        return expenseRepo.findAll();
+    public Page<Expense> getAllExpenses(Pageable page) {
+        return expenseRepo.findAll(page);
     }
 
     @Override
@@ -29,7 +32,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             return expense.get();
         }
 
-        throw new ResourceNotFoundException("Expense not found with id: " + id);
+        throw new ExpenseNotFoundException("Expense is not found for the id: " + id);
     }
 
     @Override
