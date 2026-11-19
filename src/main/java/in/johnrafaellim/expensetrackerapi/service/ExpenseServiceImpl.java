@@ -1,9 +1,7 @@
 package in.johnrafaellim.expensetrackerapi.service;
 
-import java.util.List;
 import java.util.Optional;
 
-import in.johnrafaellim.expensetrackerapi.exception.ExpenseNotFoundException;
 import in.johnrafaellim.expensetrackerapi.exception.ResourceNotFoundException;
 import in.johnrafaellim.expensetrackerapi.repository.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +30,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             return expense.get();
         }
 
-        throw new ExpenseNotFoundException("Expense is not found for the id: " + id);
+        throw new ResourceNotFoundException("Expense is not found for the id: " + id);
     }
 
     @Override
