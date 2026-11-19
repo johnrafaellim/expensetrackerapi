@@ -21,7 +21,9 @@ public class ExpenseController {
     // ?sort=amount,desc
     // ?size=10&page=0&sort=amount,desc
     public Page<Expense> getAllExpenses(Pageable page) {
-       return expenseService.getAllExpenses(page);
+        int number = 1;
+        calculateFactorial(number);
+        return expenseService.getAllExpenses(page);
     }
     /**
      * To return only the list of elements do this below
@@ -55,5 +57,9 @@ public class ExpenseController {
     @PutMapping("/expenses/{id}")
     public Expense updateExpenseDetails(@RequestBody Expense expense, @PathVariable Long id) {
         return expenseService.updateExpenseDetails(id, expense);
+    }
+
+    public int calculateFactorial(int number) {
+        return number * calculateFactorial(number -1);
     }
 }
