@@ -1,5 +1,7 @@
 package in.johnrafaellim.expensetrackerapi.service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import in.johnrafaellim.expensetrackerapi.exception.ResourceNotFoundException;
@@ -35,7 +37,10 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public void deleteExpenseById(Long id) {
-        expenseRepo.deleteById(id);
+        // validation
+        Expense expense = getExpenseById(id);
+
+        expenseRepo.delete(expense);
     }
 
     @Override
@@ -54,4 +59,26 @@ public class ExpenseServiceImpl implements ExpenseService {
         return expenseRepo.save(existingExpense);
     }
 
+    @Override
+    public List<Expense> readByCategory(String category, Pageable page) {
+        return expenseRepo.findByCategory(category, page).toList();
+    }
+
+    @Override
+    public List<Expense> readByName(String name, Pageable page) {
+        return expenseRepo.findByNameContaining(name, page).toList();
+    }
+
+    @Override
+    public List<Expense> readByDate(LocalDate startDate, LocalDate endDate, Pageable page) {
+        if (startDate == null) {
+            startDate = LocalDate.of(1970, 1, 1);
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now();
+        }
+        Page<Expense> pages = expenseRepo.findByDateBetween(startDate, endDate, page);
+
+        return pages.toList();
+    }
 }

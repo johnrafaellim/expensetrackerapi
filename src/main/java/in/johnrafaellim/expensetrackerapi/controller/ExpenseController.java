@@ -2,12 +2,14 @@ package in.johnrafaellim.expensetrackerapi.controller;
 
 import in.johnrafaellim.expensetrackerapi.entity.Expense;
 import in.johnrafaellim.expensetrackerapi.service.ExpenseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -21,8 +23,6 @@ public class ExpenseController {
     // ?sort=amount,desc
     // ?size=10&page=0&sort=amount,desc
     public Page<Expense> getAllExpenses(Pageable page) {
-        int number = 1;
-        calculateFactorial(number);
         return expenseService.getAllExpenses(page);
     }
     /**
@@ -50,7 +50,7 @@ public class ExpenseController {
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/expenses")
-    public Expense saveExpenseDetails(@RequestBody Expense expense) {
+    public Expense saveExpenseDetails(@Valid @RequestBody Expense expense) {
         return expenseService.saveExpenseDetails(expense);
     }
 
@@ -59,7 +59,22 @@ public class ExpenseController {
         return expenseService.updateExpenseDetails(id, expense);
     }
 
-    public int calculateFactorial(int number) {
-        return number * calculateFactorial(number -1);
+    @GetMapping("/expenses/category")
+    public List<Expense> getExpensesByCategory(@RequestParam String category, Pageable page) {
+        return expenseService.readByCategory(category, page);
+    }
+
+    @GetMapping("/expenses/name")
+    public List<Expense> getExpensesByName(@RequestParam String name, Pageable page) {
+        return expenseService.readByName(name, page);
+    }
+
+    @GetMapping("/expenses/date")
+    public List<Expense> getAllExpensesByDate(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            Pageable page
+    ) {
+        return expenseService.readByDate(startDate, endDate, page);
     }
 }
