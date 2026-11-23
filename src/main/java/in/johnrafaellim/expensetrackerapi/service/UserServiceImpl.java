@@ -14,10 +14,10 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepo;
 
     @Override
-    public User create(UserModel uModel) {
-        User user = new User();
-        BeanUtils.copyProperties(uModel, user);
-        return userRepo.save(user);
+    public User createUser(UserModel uModel) {
+        User newUser = new User();
+        BeanUtils.copyProperties(uModel, newUser);
+        return userRepo.save(newUser);
     }
 
 }

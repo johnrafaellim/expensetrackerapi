@@ -5,6 +5,6 @@ import in.johnrafaellim.expensetrackerapi.entity.UserModel;
 
 public interface UserService {
 
-    User create(UserModel user);
+    User createUser(UserModel user);
 
 }
