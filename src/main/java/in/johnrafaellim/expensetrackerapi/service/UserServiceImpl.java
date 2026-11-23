@@ -2,6 +2,7 @@ package in.johnrafaellim.expensetrackerapi.service;
 
 import in.johnrafaellim.expensetrackerapi.entity.User;
 import in.johnrafaellim.expensetrackerapi.entity.UserModel;
+import in.johnrafaellim.expensetrackerapi.exception.ItemAlreadyExistsException;
 import in.johnrafaellim.expensetrackerapi.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User createUser(UserModel uModel) {
+        if (userRepo.existsByEmail(uModel.getEmail())) {
+            throw new ItemAlreadyExistsException("User is already registered with email: " + uModel.getEmail());
+        }
+
         User newUser = new User();
         BeanUtils.copyProperties(uModel, newUser);
         return userRepo.save(newUser);
