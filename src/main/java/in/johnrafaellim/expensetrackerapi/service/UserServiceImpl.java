@@ -3,6 +3,7 @@ package in.johnrafaellim.expensetrackerapi.service;
 import in.johnrafaellim.expensetrackerapi.entity.User;
 import in.johnrafaellim.expensetrackerapi.entity.UserModel;
 import in.johnrafaellim.expensetrackerapi.exception.ItemAlreadyExistsException;
+import in.johnrafaellim.expensetrackerapi.exception.ResourceNotFoundException;
 import in.johnrafaellim.expensetrackerapi.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,11 @@ public class UserServiceImpl implements UserService{
         User newUser = new User();
         BeanUtils.copyProperties(uModel, newUser);
         return userRepo.save(newUser);
+    }
+
+    @Override
+    public User read(Long id) throws ResourceNotFoundException {
+        return userRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found for the id: " + id));
     }
 
 }

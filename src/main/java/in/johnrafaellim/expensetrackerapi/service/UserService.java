@@ -7,4 +7,6 @@ public interface UserService {
 
     User createUser(UserModel user);
 
+    User read(Long id);
+
 }
